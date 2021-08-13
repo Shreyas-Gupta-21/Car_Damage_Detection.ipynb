@@ -22,4 +22,12 @@ import h5py
 
 
 
+trdata = ImageDataGenerator()
+#traindata = trdata.flow_from_directory(directory="/content/drive/MyDrive/Colab/data1a/training",target_size=(224,224),classes=['Damaged', 'Not Damaged'],class_mode="sparse",batch_size=40,interpolation="nearest")
+traindata = trdata.flow_from_directory("/content/drive/MyDrive/Colab/data1a/training",target_size=(224,224),batch_size=46,interpolation="nearest")
+print(len(traindata))
+print(traindata)
 
+tsdata = ImageDataGenerator()
+testdata = tsdata.flow_from_directory(directory="/content/drive/MyDrive/Colab/data1a/validation",target_size=(224,224),batch_size=46,interpolation="nearest")
+print(len(testdata))
