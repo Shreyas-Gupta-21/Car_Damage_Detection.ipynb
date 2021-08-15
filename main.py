@@ -31,3 +31,21 @@ print(traindata)
 tsdata = ImageDataGenerator()
 testdata = tsdata.flow_from_directory(directory="/content/drive/MyDrive/Colab/data1a/validation",target_size=(224,224),batch_size=46,interpolation="nearest")
 print(len(testdata))
+
+
+
+model = VGG16(weights='imagenet', include_top=False, input_shape=(224,224,3))
+
+model.trainable = False
+
+input = keras.Input(shape=(224,224,3))
+# add new classifier layers
+flat1 = Flatten()(model.layers[-1].output)
+class1 = Dense(4096, activation='relu')(flat1)
+class2 = Dense(4096, activation='relu')(class1)
+output = Dense(2, activation='softmax')(class2)
+
+# define new model
+model = keras.Model(inputs=model.inputs, outputs=output)
+
+model.summary()
