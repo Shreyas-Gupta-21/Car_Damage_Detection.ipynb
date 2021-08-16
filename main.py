@@ -49,3 +49,36 @@ output = Dense(2, activation='softmax')(class2)
 model = keras.Model(inputs=model.inputs, outputs=output)
 
 model.summary()
+
+
+
+# initialize our initial learning rate, # of epochs to train for,and batch size
+INIT_LR = 0.0003      #0.0005
+EPOCHS = 20
+batch_size = 46  # or BS
+
+# Checkpoints between the training steps
+#model_checkpoint = ModelCheckpoint(filepath='/content/drive/MyDrive/Colab/VGG16/VGG_epoch-{epoch:02d}_loss-{loss:.4f}_val_loss-{val_loss:.4f}.h5',monitor='val_loss',
+ #                                  verbose=1,save_best_only=True,save_weights_only=False,mode='auto',save_freq=20)
+
+# Termination of training if the loss become Nan
+terminate_on_nan = TerminateOnNaN()
+
+# For watching the live loss, accuracy and graphs using tensorboard
+#t_board = TensorBoard(log_dir='./logs', histogram_freq=0,batch_size=32, write_graph=True,write_grads=False,write_images=False, 
+#                      embeddings_freq=0, update_freq='epoch')
+                                
+
+# For reducing the loss when loss hits a plateau
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,patience=3, min_lr=0.0000001)
+
+# combine all the call backs to feed to the model
+#callbacks = [model_checkpoint, t_board, terminate_on_nan, reduce_lr]
+#callbacks = [model_checkpoint, terminate_on_nan, reduce_lr]
+
+# initialize the model and optimizers
+opt = Adam(learning_rate=INIT_LR, beta_1=0.9, beta_2=0.999, amsgrad=False)
+
+# compile the model with loss function, optimizer and the evaluating metrics
+#model.compile(loss="categorical_crossentropy", optimizer=opt,metrics=["accuracy"])
+model.compile(loss="binary_crossentropy", optimizer= opt ,metrics=["accuracy"])
