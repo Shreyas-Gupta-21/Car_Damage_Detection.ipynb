@@ -82,3 +82,20 @@ opt = Adam(learning_rate=INIT_LR, beta_1=0.9, beta_2=0.999, amsgrad=False)
 # compile the model with loss function, optimizer and the evaluating metrics
 #model.compile(loss="categorical_crossentropy", optimizer=opt,metrics=["accuracy"])
 model.compile(loss="binary_crossentropy", optimizer= opt ,metrics=["accuracy"])
+
+
+
+
+#checkpoint = ModelCheckpoint(filepath="/content/drive/MyDrive/Colab/VGG16/vgg16_1.h5", monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', save_freq=1)
+
+#checkpoint = ModelCheckpoint(filepath="/content/drive/MyDrive/Colab/VGG16", monitor='val_accuracy', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', save_freq='epoch')
+
+checkpoint = ModelCheckpoint(filepath=r"C:\Users\Admin\Downloads\VGG16_NEW", monitor='val_accuracy', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', save_freq='epoch')
+
+early = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=4, verbose=1, mode='auto')
+
+#H = model.fit_generator(steps_per_epoch= 1840 // batch_size,generator=traindata, validation_data= testdata, validation_steps=460// batch_size,epochs=EPOCHS,callbacks=[checkpoint, t_board, terminate_on_nan, reduce_lr])
+#H = model.fit_generator(steps_per_epoch= 1840 // batch_size,generator=traindata, validation_data= testdata, validation_steps=460// batch_size,epochs=EPOCHS,callbacks=[checkpoint, early, terminate_on_nan, reduce_lr])
+
+H = model.fit_generator(traindata,steps_per_epoch= int(1840/ batch_size),validation_data= testdata, validation_steps=int(460/ batch_size),epochs=EPOCHS,callbacks=[checkpoint,terminate_on_nan,reduce_lr])
+
